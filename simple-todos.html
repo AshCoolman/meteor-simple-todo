@@ -1,0 +1,20 @@
+<head>
+  <title>simple-todos</title>
+</head>
+
+<body>
+    <header>
+        <h1>To do</h1>
+    </header>
+  <ul>
+  {{#each tasks}}
+    {{> task}}
+  {{/each}}
+  </ul>
+</body>
+
+<template name="task">
+  <li>
+    {{text}}
+  </li>
+</template>
