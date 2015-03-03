@@ -3,10 +3,15 @@ if Meteor.isClient
   Template.body.helpers
     tasks: ->
       Tasks.find {}, sort: {createdAt:-1}
-      
+
   Template.body.events
-    'focus .new-task': (e) ->
-      console.log 'focus'
+    'click .toggle-checked': (e) ->
+      Tasks.update @_id, $set: 
+          checked: not @checked
+
+    'click .delete': (e) ->
+      Tasks.remove @_id
+
     'submit .new-task': (e) ->
       
       Tasks.insert
