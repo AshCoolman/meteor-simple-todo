@@ -5,6 +5,10 @@
 <body>
     <header>
         <h1>To do</h1>
+        <label class="hide-completed">
+          <input type="checkbox" checked="{{hideCompleted}}">
+          {{msg.hideCompleted}}
+        </label>
         <form class="new-task">
             <input type="text" name="text" placeholder="type task here"/>
         </form>

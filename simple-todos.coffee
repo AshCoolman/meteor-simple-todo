@@ -2,7 +2,10 @@ Tasks = new Mongo.Collection("tasks")
 if Meteor.isClient
   Template.body.helpers
     tasks: ->
-      Tasks.find {}, sort: {createdAt:-1}
+      findParams = { checked: {$ne: true} } if Session.get 'hideCompleted'
+      Tasks.find findParams or {}, sort: { createdAt: -1 }
+    msg:
+      hideCompleted: 'Hide completed tasks!'
 
   Template.body.events
     'click .toggle-checked': (e) ->
@@ -12,8 +15,11 @@ if Meteor.isClient
     'click .delete': (e) ->
       Tasks.remove @_id
 
+    'change .hide-completed input': (e) ->
+      Session.set 'hideCompleted', e.target.checked
+
+
     'submit .new-task': (e) ->
-      
       Tasks.insert
         text: e.target.text.value
         createdAt: new Date()
