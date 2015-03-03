@@ -5,12 +5,18 @@
 <body>
     <header>
         <h1>To do</h1>
+        <form class="new-task">
+            <input type="text" name="text" placeholder="type task here"/>
+        </form>
     </header>
+
+
   <ul>
   {{#each tasks}}
     {{> task}}
   {{/each}}
   </ul>
+
 </body>
 
 <template name="task">

@@ -4,8 +4,17 @@ if Meteor.isClient
     tasks: ->
       Tasks.find {}
   Template.body.events
-    'focus .new-class': (e) ->
-      console.log e
+    'focus .new-task': (e) ->
+      console.log 'focus'
+    'submit .new-task': (e) ->
+      
+      Tasks.insert
+        text: e.target.text.value
+        createdAt: new Date()
+
+      e.target.text.value = ""
+
+      false
 
 if Meteor.isServer
   Meteor.startup ->
