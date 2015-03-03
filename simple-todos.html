@@ -9,9 +9,12 @@
           <input type="checkbox" checked="{{hideCompleted}}">
           {{msg.hideCompleted}}
         </label>
+        {{> loginButtons}}
+        {{#if currentUser}}
         <form class="new-task">
             <input type="text" name="text" placeholder="type task here"/>
         </form>
+        {{/if}}
     </header>
 
 
@@ -27,6 +30,6 @@
   <li class="{{#if checked}}checked{{/if}}">
     <button class="delete">&times;</button>
     <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
-    <span class="text">{{text}}</span>
+    <span class="text"><strong>{{username}}</strong>: {{text}}</span>
   </li>
 </template>

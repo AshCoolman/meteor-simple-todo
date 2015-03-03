@@ -27,10 +27,15 @@ if Meteor.isClient
       Tasks.insert
         text: e.target.text.value
         createdAt: new Date()
+        owner: Meteor.userId()
+        username: Meteor.user().username
 
       e.target.text.value = ""
 
       false
+
+  Accounts.ui.config 
+    passwordSignupFields: 'USERNAME_ONLY'
 
 if Meteor.isServer
   Meteor.startup ->
