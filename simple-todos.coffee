@@ -4,6 +4,10 @@ if Meteor.isClient
     tasks: ->
       findParams = { checked: {$ne: true} } if Session.get 'hideCompleted'
       Tasks.find findParams or {}, sort: { createdAt: -1 }
+    incompleteTasks: ->
+      Tasks
+        .find {checked: {$ne: true}}
+        .count()
     msg:
       hideCompleted: 'Hide completed tasks!'
 
