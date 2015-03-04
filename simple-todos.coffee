@@ -57,27 +57,32 @@ if Meteor.isServer
       ]
   Meteor.startup ->
 
-Meteor.methods
-  addTask: (text) ->
-    throw new Meteor.Error 'not-authorised' unless Meteor.userId()
-    Tasks.insert
-      text: text
-      createdAt: new Date()
-      owner: Meteor.userId()
-      username: Meteor.user().username
-  deleteTask: (taskId) ->
-    task = Tasks.findOne taskId
-    throw new Meteor.Error 'not-authorised' if task.owner isnt Meteor.userId() and task.private
-    Tasks.remove taskId
-  setChecked: (taskId, setChecked) ->
-    task = Tasks.findOne taskId
-    throw new Meteor.Error 'not-authorised' if task.owner isnt Meteor.userId() and task.private
-    Tasks.update taskId, $set:
-      checked: setChecked
-  setPrivate: (taskId, privateVal) ->
-    task = Tasks.findOne taskId
-    throw new Meteor.Error 'not-authorised' if task.owner isnt Meteor.userId()
-    Tasks.update taskId, $set: {private: privateVal}
+
+  # Methods performed securely on server
+  Meteor.methods
+    addTask: (text) ->
+      throw new Meteor.Error 'not-authorised' unless Meteor.userId()
+      Tasks.insert
+        text: text
+        createdAt: new Date()
+        owner: Meteor.userId()
+        username: Meteor.user().username
+
+    deleteTask: (taskId) ->
+      task = Tasks.findOne taskId
+      throw new Meteor.Error 'not-authorised' if task.owner isnt Meteor.userId() and task.private
+      Tasks.remove taskId
+
+    setChecked: (taskId, setChecked) ->
+      task = Tasks.findOne taskId
+      throw new Meteor.Error 'not-authorised' if task.owner isnt Meteor.userId() and task.private
+      Tasks.update taskId, $set:
+        checked: setChecked
+
+    setPrivate: (taskId, privateVal) ->
+      task = Tasks.findOne taskId
+      throw new Meteor.Error 'not-authorised' if task.owner isnt Meteor.userId()
+      Tasks.update taskId, $set: {private: privateVal}
 
 
 
