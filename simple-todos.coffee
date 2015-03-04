@@ -1,8 +1,14 @@
 notTrue = $ne: true
+
+# Reference to monogo collection
 Tasks = new Mongo.Collection "tasks"
 
+
 if Meteor.isClient
+  # Manually link client to the 'tasks' mongo collection
   Meteor.subscribe 'tasks'
+
+  # Helpers for the 'body' template
   Template.body.helpers
     tasks: ->
       findParams = if Session.get 'hideCompleted' then checked: notTrue else {}
@@ -14,29 +20,36 @@ if Meteor.isClient
     msg:
       hideCompleted: 'Hide completed tasks!'
 
-  Template.task.helpers
-    isOwner: ->
-      @owner is Meteor.userId()
-      return true
-
+  # Events caught by the 'body' template
   Template.body.events
     'submit .new-task': (e) ->
       Meteor.call 'addTask', e.target.text.value
       e.target.text.value = ""
       false
+
     'click button.toggle-private': (e) ->
       Meteor.call 'setPrivate', @_id, not @private
+
     'click button.toggle-checked': (e) ->
       Meteor.call 'setChecked', @_id, not @checked
+
     'click .delete': (e) ->
       Meteor.call 'deleteTask', @_id
+
     'change .hide-completed input': (e) ->
       Session.set 'hideCompleted', e.target.checked
 
+  # Helpers for the 'task' template
+  Template.task.helpers
+    isOwner: ->
+      @owner is Meteor.userId()
+      return true
+      
   Accounts.ui.config 
-    passwordSignupFields: 'USERNAME_ONLY'
+    passwordSignupFields: 'USERNAME_ONLY' # Don't use email
 
 if Meteor.isServer
+  # Allow clients to get their private tasks, and/or public tasks
   Meteor.publish 'tasks', ->
     Tasks.find $or: [
         { private: notTrue }
